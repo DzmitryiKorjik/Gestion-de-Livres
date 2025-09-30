@@ -1,0 +1,47 @@
+package com.example.myapplication.data;
+
+import android.content.Context;
+
+import com.example.myapplication.util.ExecutorsProvider;
+
+public class DbPrepopulate {
+    public static void insertDefaults(Context context) {
+        ExecutorsProvider.io().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(context);
+
+            // Livres de démo
+            BookDao bookDao = db.bookDao();
+            if (bookDao.getAll().isEmpty()) {
+                bookDao.insert(new Book(
+                        "1984",
+                        "George Orwell",
+                        "Dystopie politique dénonçant les dérives totalitaires...",
+                        "book_1984"
+                ));
+
+                bookDao.insert(new Book(
+                        "L'Étranger",
+                        "Albert Camus",
+                        "Roman de l'absurde explorant l'aliénation...",
+                        "book_etranger"
+                ));
+
+                bookDao.insert(new Book(
+                        "Le Petit Prince",
+                        "Antoine de Saint-Exupéry",
+                        "Conte poétique et philosophique sur l'amitié...",
+                        "book_petit_prince"
+                ));
+
+                // ... et ainsi de suite pour tes autres livres
+            }
+
+            // Utilisateur de démo
+            UserDao userDao = db.userDao();
+            User existing = userDao.findByEmail("demo@demo.com");
+            if (existing == null) {
+                userDao.insert(new User("demo@demo.com", "demo", "Demo User"));
+            }
+        });
+    }
+}
