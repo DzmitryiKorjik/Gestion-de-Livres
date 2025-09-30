@@ -72,6 +72,20 @@ app/
 
 ---
 
+## Installation
+
+1. **Clonez ce dépôt:**
+   ```bash
+   git clone https://github.com/DzmitryiKorjik/Gestion-de-Livres.git
+   ```
+   
+2. Accédez au répertoire du projet :
+    ```bash
+    cd Gestion-de-Livres
+    ```
+
+---
+
 ## 🔧 Configuration Gradle (rappel)
 
 ### `settings.gradle.kts` (racine)
