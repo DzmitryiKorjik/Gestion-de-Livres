@@ -53,4 +53,11 @@ dependencies {
 // Lifecycle (optionnel)
     implementation("androidx.lifecycle:lifecycle-livedata:2.8.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.4")
+
+
+    implementation("com.firebaseui:firebase-ui-auth:9.0.0")
+
+    // Required only if Facebook login support is required
+    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
+    implementation("com.facebook.android:facebook-android-sdk:8.x")
 }

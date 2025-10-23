@@ -4,7 +4,13 @@ import android.content.Context;
 
 import com.example.myapplication.util.ExecutorsProvider;
 
+/**
+ * Utilitaire de pré-remplissage de la base.
+ */
 public class DbPrepopulate {
+    /**
+     * Insère des données par défaut (livres + utilisateur de démo).
+     */
     public static void insertDefaults(Context context) {
         ExecutorsProvider.io().execute(() -> {
             AppDatabase db = AppDatabase.getInstance(context);
