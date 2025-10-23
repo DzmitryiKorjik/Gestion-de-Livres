@@ -12,7 +12,7 @@ Application Android **Java** avec 3 écrans (Login → Liste → Détail), **Roo
 * **Détail d’un livre**
 * **Checkbox "Déjà lu"** (persistance dans Room)
 * **Ajout rapide** d’un livre via FAB (+)
-* **Images** par livre (à faire)
+* **Images** par livre
 
 ---
 
@@ -215,7 +215,6 @@ plugins {
 * Édition / suppression de livres (`@Update`, `@Delete`)
 * Recherche / filtre dans la liste
 * Architecture `ViewModel` + `LiveData`/`Flow` pour observer la DB
-* Upload d’images depuis la galerie (URI) au lieu de `drawable`
 
 ---
 

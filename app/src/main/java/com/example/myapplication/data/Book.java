@@ -46,6 +46,8 @@ public class Book {
      */
     public String imageRes;
 
+    public String imageBase64;
+
     /**
      * Constructeur utilisé par Room (le plus complet non-ignoré).
      *
@@ -58,5 +60,13 @@ public class Book {
         this.description = description;
         this.read = false; // valeur par défaut lors de la création
         this.imageRes = imageRes;
+        this.imageBase64 = null;
+    }
+
+    // constructeur pratique si on a déjà du base64
+    public static Book withBase64(String title, String author, String description, String imageBase64) {
+        Book b = new Book(title, author, description, null);
+        b.imageBase64 = imageBase64;
+        return b;
     }
 }

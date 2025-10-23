@@ -36,4 +36,7 @@ public interface BookDao {
      */
     @Query("UPDATE books SET read = :read WHERE id = :id")
     void setRead(long id, boolean read);
+
+    @Query("UPDATE books SET imageBase64 = :base64 WHERE id = :id")
+    void setImage(long id, String base64);
 }

@@ -7,10 +7,9 @@
 
     <ImageView
         android:id="@+id/imgBook"
-        android:layout_width="60dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:layout_marginEnd="12dp" />
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="0dp"

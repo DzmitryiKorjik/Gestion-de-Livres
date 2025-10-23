@@ -20,6 +20,7 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
     private final TextView tvAuthor;  // Auteur du livre
     private final CheckBox cbRead;    // Case à cocher (lu / non lu)
     private final ImageView imgBook;  // Image du livre
+    public ImageView imageView;
 
     public BookViewHolder(@NonNull View itemView) {
         super(itemView);
