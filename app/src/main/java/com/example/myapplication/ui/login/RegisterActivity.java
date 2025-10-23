@@ -14,6 +14,7 @@ import com.example.myapplication.data.AppDatabase;
 import com.example.myapplication.data.User;
 import com.example.myapplication.data.UserDao;
 import com.example.myapplication.util.ExecutorsProvider;
+import com.example.myapplication.util.Toaster;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -85,13 +86,14 @@ public class RegisterActivity extends AppCompatActivity {
                     });
                 }
 
-                toast("Compte créé. Connecte-toi !");
+
+                Toaster.show(this, "Compte créé. Connecte-toi !");
                 finish();
             } else {
                 String msg = (task.getException() != null)
                         ? task.getException().getLocalizedMessage()
                         : "Échec de l'inscription";
-                toast(msg);
+                Toaster.show(this, msg);
             }
         });
     }
