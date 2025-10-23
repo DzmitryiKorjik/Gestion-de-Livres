@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 
@@ -60,4 +61,5 @@ dependencies {
     // Required only if Facebook login support is required
     // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
     implementation("com.facebook.android:facebook-android-sdk:8.x")
+    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
 }
