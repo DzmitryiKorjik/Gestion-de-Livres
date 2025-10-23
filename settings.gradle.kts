@@ -1,4 +1,3 @@
-// settings.gradle.kts (Projet, racine)
 pluginManagement {
     repositories {
         google()
