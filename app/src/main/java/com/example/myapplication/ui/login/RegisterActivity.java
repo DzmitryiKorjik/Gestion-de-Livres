@@ -47,15 +47,15 @@ public class RegisterActivity extends AppCompatActivity {
         String name  = etName.getText().toString().trim();
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            toast("Email invalide");
+            Toaster.show(this, "Email invalide");
             return;
         }
         if (pwd.length() < 6) {
-            toast("Mot de passe trop court (≥ 6)");
+            Toaster.show(this, "Le mot de passe doit contenir au moins 6 caractères");
             return;
         }
         if (name.isEmpty()) {
-            toast("Entre un nom");
+            Toaster.show(this, "Entre un nom");
             return;
         }
 
