@@ -6,13 +6,13 @@ Application Android **Java** avec 3 écrans (Login → Liste → Détail), **Roo
 
 ## 📦 Fonctionnalités
 
-* **Login / Inscription** (Room) + mémorisation de session (SharedPreferences)
+* **Login / Inscription** Fibase
 * **Déconnexion** depuis l’écran principal (menu toolbar)
 * **Liste de livres** avec `RecyclerView` + `ViewHolder` + `Adapter`
 * **Détail d’un livre**
 * **Checkbox "Déjà lu"** (persistance dans Room)
 * **Ajout rapide** d’un livre via FAB (+)
-* **Images** par livre (depuis `res/drawable/`)
+* **Images** par livre (à faire)
 
 ---
 
@@ -95,7 +95,11 @@ app/
 ### `build.gradle.kts` (Projet, racine)
 
 ```kotlin
-plugins { id("com.android.application") version "8.5.2" apply false }
+plugins { 
+    id("com.android.application") version "8.5.2" apply false
+    
+    id("com.google.gms.google-services") version "4.4.4" apply false
+}
 ```
 
 ### `app/build.gradle.kts` (Module app)
@@ -103,6 +107,7 @@ plugins { id("com.android.application") version "8.5.2" apply false }
 * Dépendances AppCompat/Material/RecyclerView/Room/Lifecycle
 * `compileSdk = 34`, `minSdk = 24`, `targetSdk = 34`
 * `compileOptions` en Java 17
+* `com.google.firebase:firebase-bom:34.4.0` + `implementation("com.google.firebase:firebase-auth")`
 
 > En phase TP vous pouvez activer `fallbackToDestructiveMigration()` dans `AppDatabase` pour simplifier les changements de schéma.
 
@@ -113,7 +118,7 @@ plugins { id("com.android.application") version "8.5.2" apply false }
 ### Entités
 
 * **Book** : `id`, `title`, `author`, `description`, `read:boolean`, `imageRes:String`
-* **User** : `id`, `email`, `password` *(démo, en clair)*, `displayName`
+* **User** : `id`, `email`, `displayName`, `firebaseUid`
 
 ### DAO
 
@@ -122,7 +127,7 @@ plugins { id("com.android.application") version "8.5.2" apply false }
 
 ### Pré-remplissage
 
-* Dans `DbPrepopulate.insertDefaults(...)` : insertion de quelques **livres** + utilisateur **demo**.
+* Dans `DbPrepopulate.insertDefaults(...)` : insertion de quelques **livres**.
 
 ### Migrations
 
@@ -131,45 +136,57 @@ plugins { id("com.android.application") version "8.5.2" apply false }
 
 ---
 
-## 🖼️ Images des livres
-
-* Placez les fichiers dans `app/src/main/res/drawable/`
-* **Noms autorisés** : minuscules/chiffres/underscore seulement (ex. `book_petit_prince.png`)
-* Dans `Book.imageRes`, stockez **le nom sans extension** (ex. `book_petit_prince`)
-* Le `ViewHolder` résout l’ID via `getIdentifier(...)` et affiche un **placeholder** si manquant
-
----
-
 ## 🔐 Authentification & session
 
-* **Login** vérifie l’email en DB (`UserDao.findByEmail`) puis compare le mot de passe
-* **Inscription** : crée un nouvel utilisateur en DB (`RegisterActivity`)
-* **Session** : `SessionManager` (SharedPreferences) mémorise l’email connecté
-* **Déconnexion** : menu ⋮ dans `MainActivity` → supprime la session et retourne à `LoginActivity`
+* **Login** → connexion via **Firebase Authentication** (`LoginActivity`),
+  utilisant `FirebaseAuth.signInWithEmailAndPassword(...)`.
 
-### Identifiants de démo
+* **Inscription** → création d’un **compte Firebase** (`RegisterActivity`)
 
-* Email : `demo@demo.com`
-* Mot de passe : `demo`
+   * enregistrement optionnel du profil local (`User`) dans la base `Room`
+     (email, displayName, firebaseUid).
+
+* **Session locale** → `SessionManager` (basé sur `SharedPreferences`)
+  mémorise l’adresse e-mail ou l’UID Firebase de l’utilisateur connecté.
+
+* **Déconnexion** → depuis le menu ⋮ dans `MainActivity`,
+  supprime la session locale (`SessionManager.clear()`)
+  et revient à `LoginActivity`.
 
 ---
 
 ## 🚦 Navigation
 
-1. **LoginActivity** (MAIN/LAUNCHER, `android:exported="true"`)
+1. **LoginActivity** *(MAIN / LAUNCHER — `android:exported="true`)*
 
-    * Bouton **Créer un compte** → `RegisterActivity`
-    * Succès → `MainActivity`
-2. **MainActivity**
+   * Authentification via **FirebaseAuth** (`signInWithEmailAndPassword`)
+   * Bouton **Créer un compte** → `RegisterActivity`
+   * Succès → redirection vers **`MainActivity`**
+   * `SessionManager` sauvegarde l’utilisateur connecté (email / UID)
 
-    * Liste `RecyclerView` (clic élément → `DetailActivity`)
-    * Checkbox "lu" met à jour la DB
-    * FAB **+** pour ajouter un livre (titre/auteur/description)
-    * Menu **Déconnexion**
-3. **DetailActivity**
+2. **RegisterActivity**
 
-    * Toolbar avec flèche retour
-    * Affiche titre/auteur/description + image
+   * Crée un compte via **FirebaseAuth.createUserWithEmailAndPassword**
+   * Met à jour le `displayName` Firebase
+   * (Optionnel) Insère un `User` local (email, displayName, firebaseUid) dans la base Room
+   * Retour automatique à l’écran de **Login**
+
+3. **MainActivity**
+
+   * Affiche la **liste des livres** via un `RecyclerView`
+   * Clic sur un livre → ouvre **`DetailActivity`**
+   * Checkbox **“Lu”** → met à jour le champ `read` dans la DB
+   * **FAB “+”** → ouvre un **dialogue d’ajout** :
+
+      * titre / auteur / description
+      * (nouveau) sélection d’une **image** depuis la galerie, encodée en **Base64** et stockée dans la DB
+   * Menu ⋮ **Déconnexion** → efface la session (`SessionManager.clear()`) et revient à `LoginActivity`
+
+4. **DetailActivity**
+
+   * Toolbar avec flèche de retour
+   * Affiche **titre**, **auteur**, **description**, et (si présente) **l’image Base64** décodée
+   * Possible évolution : bouton *“Modifier”* ou *“Supprimer”* (si ajouté plus tard)
 
 ---
 
@@ -199,7 +216,6 @@ plugins { id("com.android.application") version "8.5.2" apply false }
 * Recherche / filtre dans la liste
 * Architecture `ViewModel` + `LiveData`/`Flow` pour observer la DB
 * Upload d’images depuis la galerie (URI) au lieu de `drawable`
-* Hash des mots de passe (BCrypt) et backend réel
 
 ---
 
