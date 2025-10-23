@@ -39,14 +39,6 @@ public class DbPrepopulate {
                         "book_petit_prince"
                 ));
 
-                // ... et ainsi de suite pour tes autres livres
-            }
-
-            // Utilisateur de démo
-            UserDao userDao = db.userDao();
-            User existing = userDao.findByEmail("demo@demo.com");
-            if (existing == null) {
-                userDao.insert(new User("demo@demo.com", "demo", "Demo User"));
             }
         });
     }

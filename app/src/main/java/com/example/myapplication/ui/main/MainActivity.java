@@ -29,7 +29,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_USER_EMAIL = "EXTRA_USER_EMAIL";
     public static final String EXTRA_BOOK_ID   = "EXTRA_BOOK_ID";
 
     private BookAdapter adapter;
